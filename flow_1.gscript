@@ -1,0 +1,96 @@
+{
+  "$type": "GPMAutomateEditor.Models.SubEditor, GPMAutomateEditor.Models",
+  "body": {
+    "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+    "nodes": [
+      {
+        "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+        "nodes": [],
+        "expanded": true,
+        "continue_on_error": false,
+        "id": "7c5ec11c-5778-401b-81fc-fa6bc11ed317",
+        "display_text": "Normal block",
+        "raw_input": null,
+        "comment": "GHI CHÚ FLOW 1\n- Phần đầu flow: xem video hiện tại trong 2–8 giây, di chuyển chuột ngẫu nhiên trong vùng video, rồi chuyển mượt đến đúng article/video kế tiếp.\n- Sửa thời gian xem: Block #2 `TikTok: xem video rồi cuộn video tiếp theo` → node #1 `random watch time` (MIN/MAX, mili giây).\n- Sửa vùng di chuyển chuột: Block #2 → node #2 `make random video position` (tỉ lệ ngang/dọc của cửa sổ).\n- Node #4 `scroll next TikTok article` dùng article kế tiếp thay BrowserMouseScroll để không bị giật từng nấc nhỏ.\n- Cách đếm: dùng số thứ tự block/node hiển thị trong GPM Automate, tính cả block ghi chú này."
+      },
+      {
+        "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+        "nodes": [
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 7,
+            "element_xpath": null,
+            "output_variable_name": null,
+            "delay": "0,0",
+            "continue_on_error": false,
+            "id": "2c355059-3229-4dba-806b-c2c99cf68681",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"2000\"},{\"Key\":\"MAX\",\"Value\":\"8000\"}]",
+            "comment": "random watch time for current TikTok video"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 68,
+            "element_xpath": null,
+            "output_variable_name": "tiktokMousePos",
+            "delay": "0,0",
+            "continue_on_error": false,
+            "id": "cb50bd88-c2f2-4fc1-a39b-cad73c97cf44",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"function A(){var x=Math.round(window.innerWidth*(0.45+Math.random()*0.17));var y=Math.round(window.innerHeight*(0.35+Math.random()*0.30));return x+','+y;} return A();\"}]",
+            "comment": "make random video position"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 50,
+            "element_xpath": null,
+            "output_variable_name": null,
+            "delay": "300,800",
+            "continue_on_error": false,
+            "id": "fccf0ada-1b03-42fd-b051-872f131a57b8",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"MOVE_TYPE\",\"Value\":\"MOVE_POS\"},{\"Key\":\"XPATH\",\"Value\":\"\"},{\"Key\":\"POS\",\"Value\":\"$tiktokMousePos\"}]",
+            "comment": "move into TikTok video"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 68,
+            "element_xpath": null,
+            "output_variable_name": "tiktokScrollStatus",
+            "delay": "0,0",
+            "continue_on_error": false,
+            "id": "15154dea-698e-4630-899b-0f7e54a46bc7",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"function A(){var xs=Array.prototype.slice.call(document.querySelectorAll('article')).filter(function(a){var r=a.getBoundingClientRect();return a.isConnected&&r.width>100&&r.height>100;});if(!xs.length){return 'ARTICLE_NOT_FOUND';}var current=0,best=Infinity;for(var i=0;i<xs.length;i++){var r=xs[i].getBoundingClientRect(),d=Math.abs(r.top);if(d<best){best=d;current=i;}}var next=xs[current+1];if(!next){return 'NEXT_ARTICLE_NOT_FOUND';}next.scrollIntoView({block:'start',behavior:'smooth'});return 'SCROLLED_TO_NEXT_ARTICLE';} return A();\"}]",
+            "comment": "scroll next TikTok article"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 7,
+            "element_xpath": null,
+            "output_variable_name": null,
+            "delay": "0,0",
+            "continue_on_error": false,
+            "id": "2cf99f7b-a96d-4963-949c-77b758223324",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"800\"},{\"Key\":\"MAX\",\"Value\":\"1500\"}]",
+            "comment": "wait TikTok video snap/render"
+          }
+        ],
+        "expanded": true,
+        "continue_on_error": false,
+        "id": "40ad4d14-67df-4322-b410-2b673009deaf",
+        "display_text": "Normal block",
+        "raw_input": null,
+        "comment": "TikTok: xem video rồi cuộn video tiếp theo"
+      }
+    ],
+    "expanded": true,
+    "continue_on_error": false,
+    "id": "e1adead6-ce10-489e-92b1-2ac0821f0b19",
+    "display_text": null,
+    "raw_input": null,
+    "comment": null
+  },
+  "name": "Main"
+}

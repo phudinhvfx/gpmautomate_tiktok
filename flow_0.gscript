@@ -1,0 +1,50 @@
+{
+  "$type": "GPMAutomateEditor.Models.SubEditor, GPMAutomateEditor.Models",
+  "body": {
+    "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+    "nodes": [
+      {
+        "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+        "nodes": [
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 39,
+            "element_xpath": null,
+            "output_variable_name": null,
+            "delay": "1000,1500",
+            "continue_on_error": false,
+            "id": "c669da25-9023-443a-be51-4ddc64a0cc66",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"URL\",\"Value\":\"https://www.tiktok.com/\"},{\"Key\":\"TIME_OUT\",\"Value\":\"30\"}]",
+            "comment": "go to TikTok"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 44,
+            "element_xpath": "//button[@data-e2e='nav-search' and @role='searchbox']",
+            "output_variable_name": null,
+            "delay": "1000,1500",
+            "continue_on_error": false,
+            "id": "822d8635-8b00-4468-b349-38ae907cb0e3",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"TIME_OUT\",\"Value\":\"30\"}]",
+            "comment": "wait TikTok search"
+          }
+        ],
+        "expanded": true,
+        "continue_on_error": false,
+        "id": "c2ca6818-da09-40f0-8f5a-6a6c10e5ded8",
+        "display_text": "Normal block",
+        "raw_input": null,
+        "comment": "Mở trang TikTok"
+      }
+    ],
+    "expanded": true,
+    "continue_on_error": false,
+    "id": "1992f256-23ef-43cd-b371-e7abb238a521",
+    "display_text": null,
+    "raw_input": null,
+    "comment": null
+  },
+  "name": "Main"
+}
