@@ -1,0 +1,34 @@
+{
+  "$type": "GPMAutomateEditor.Models.Editor, GPMAutomateEditor.Models",
+  "before_init": {
+    "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+    "nodes": [],
+    "expanded": false,
+    "continue_on_error": false,
+    "id": "cde15593-8fd4-4772-a1d0-685da3c55614",
+    "display_text": null,
+    "raw_input": null,
+    "comment": "Before browser opened"
+  },
+  "main_logic": {
+    "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+    "nodes": [],
+    "expanded": false,
+    "continue_on_error": false,
+    "id": "26bd4004-105a-4564-a839-8648bcd38cd3",
+    "display_text": null,
+    "raw_input": null,
+    "comment": "Main logic"
+  },
+  "after_quit": {
+    "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+    "nodes": [],
+    "expanded": false,
+    "continue_on_error": false,
+    "id": "161c256c-6819-4084-b3de-9c0013bdfaa5",
+    "display_text": null,
+    "raw_input": null,
+    "comment": "After browser closed"
+  },
+  "name": "Main"
+}
