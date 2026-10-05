@@ -11,7 +11,7 @@
         "id": "7c5ec11c-5778-401b-81fc-fa6bc11ed317",
         "display_text": "Normal block",
         "raw_input": null,
-        "comment": "GHI CHÚ FLOW 1\n- Phần đầu flow: xem video hiện tại trong 2–8 giây, di chuyển chuột ngẫu nhiên trong vùng video, rồi chuyển mượt đến đúng article/video kế tiếp.\n- Sửa thời gian xem: Block #2 `TikTok: xem video rồi cuộn video tiếp theo` → node #1 `random watch time` (MIN/MAX, mili giây).\n- Sửa vùng di chuyển chuột: Block #2 → node #2 `make random video position` (tỉ lệ ngang/dọc của cửa sổ).\n- Node #4 `scroll next TikTok article` dùng article kế tiếp thay BrowserMouseScroll để không bị giật từng nấc nhỏ.\n- Cách đếm: dùng số thứ tự block/node hiển thị trong GPM Automate, tính cả block ghi chú này."
+        "comment": "GHI CHÚ FLOW 1\n- Thao tác chính: xem video 2–8 giây, di chuyển chuột ngẫu nhiên, chuyển mượt tới video kế tiếp, sau đó random Like.\n- Sửa thời gian xem: Block #2 `TikTok: xem video rồi cuộn video tiếp theo` → node #1 `random watch time` (MIN/MAX, mili giây).\n- Sửa vùng di chuyển chuột: Block #2 → node #2 `make random video position` (tỉ lệ ngang/dọc của cửa sổ).\n- Node #4 `scroll next TikTok article` dùng article kế tiếp thay BrowserMouseScroll để không bị giật từng nấc nhỏ.\n- Sửa random Like: Block #3 `random TikTok like decision` → node #1 `random like number`; Like khi kết quả là 1 hoặc 9; xác nhận bằng `aria-pressed=true` (nhãn Việt/Anh chỉ dùng nhận diện ban đầu).\n- Block #4 giữ trạng thái Like thêm 5–10 giây; nếu `aria-pressed` quay về false, flow báo lỗi thay vì publish OK.\n- Hai node cuối chỉ publish `OK` sau khi mọi kiểm tra hoàn tất; Main chỉ reload khi flow thực sự lỗi.\n- Cách đếm: dùng số thứ tự block/node hiển thị trong GPM Automate, tính cả block ghi chú này."
       },
       {
         "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
@@ -21,11 +21,11 @@
             "type": 7,
             "element_xpath": null,
             "output_variable_name": null,
-            "delay": "0,0",
+            "delay": "1500,2500",
             "continue_on_error": false,
             "id": "2c355059-3229-4dba-806b-c2c99cf68681",
             "display_text": null,
-            "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"2000\"},{\"Key\":\"MAX\",\"Value\":\"8000\"}]",
+            "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"4000\"},{\"Key\":\"MAX\",\"Value\":\"8000\"}]",
             "comment": "random watch time for current TikTok video"
           },
           {
@@ -33,7 +33,7 @@
             "type": 68,
             "element_xpath": null,
             "output_variable_name": "tiktokMousePos",
-            "delay": "0,0",
+            "delay": "300,800",
             "continue_on_error": false,
             "id": "cb50bd88-c2f2-4fc1-a39b-cad73c97cf44",
             "display_text": null,
@@ -45,7 +45,7 @@
             "type": 50,
             "element_xpath": null,
             "output_variable_name": null,
-            "delay": "300,800",
+            "delay": "400,950",
             "continue_on_error": false,
             "id": "fccf0ada-1b03-42fd-b051-872f131a57b8",
             "display_text": null,
@@ -57,7 +57,7 @@
             "type": 68,
             "element_xpath": null,
             "output_variable_name": "tiktokScrollStatus",
-            "delay": "0,0",
+            "delay": "500,1500",
             "continue_on_error": false,
             "id": "15154dea-698e-4630-899b-0f7e54a46bc7",
             "display_text": null,
@@ -69,7 +69,7 @@
             "type": 7,
             "element_xpath": null,
             "output_variable_name": null,
-            "delay": "0,0",
+            "delay": "600,1200",
             "continue_on_error": false,
             "id": "2cf99f7b-a96d-4963-949c-77b758223324",
             "display_text": null,
@@ -83,6 +83,255 @@
         "display_text": "Normal block",
         "raw_input": null,
         "comment": "TikTok: xem video rồi cuộn video tiếp theo"
+      },
+      {
+        "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+        "nodes": [
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 11,
+            "element_xpath": null,
+            "output_variable_name": "tiktokLikeRandom",
+            "delay": "400,1200",
+            "continue_on_error": false,
+            "id": "333daaad-4c49-4eaa-9f49-dd7424309297",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"1\"},{\"Key\":\"MAX\",\"Value\":\"9\"}]",
+            "comment": "random like number"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.IfBlockNode, GPMAutomateEditor.Models",
+            "condition": "$tiktokLikeRandom = 1",
+            "nodes": [
+              {
+                "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+                "nodes": [
+                  {
+                    "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                    "type": 68,
+                    "element_xpath": null,
+                    "output_variable_name": "tiktokLikeStatusBefore",
+                    "delay": "300,650",
+                    "continue_on_error": false,
+                    "id": "ef0eb215-0916-4301-8e71-f578390e80b1",
+                    "display_text": null,
+                    "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"function A(){document.querySelectorAll('[data-gpm-tiktok-like-ref]').forEach(function(x){x.removeAttribute('data-gpm-tiktok-like-ref');});var xs=Array.prototype.slice.call(document.querySelectorAll('article')).filter(function(a){var r=a.getBoundingClientRect();return a.isConnected&&r.width>100&&r.height>100;});if(!xs.length){return 'ARTICLE_NOT_FOUND';}var current=0,best=Infinity;for(var i=0;i<xs.length;i++){var d=Math.abs(xs[i].getBoundingClientRect().top);if(d<best){best=d;current=i;}}var n=xs[current].querySelector('[data-e2e=\\\"like-icon\\\"][role=\\\"button\\\"]');if(!n){return 'LIKE_BUTTON_NOT_FOUND';}n.setAttribute('data-gpm-tiktok-like-ref','1');var label=(n.getAttribute('aria-label')||'').replace(/\\\\s+/g,' ').trim();var pressed=(n.getAttribute('aria-pressed')||'').toLowerCase();var readyLabel=/^(Thích|Like)\\\\b/i.test(label);var likedLabel=/^(Bỏ thích|Unlike|Remove Like)\\\\b/i.test(label);if(pressed==='true'){return 'ALREADY_LIKED';}if(pressed==='false'&&readyLabel){return 'READY_TO_LIKE';}if(pressed==='false'&&likedLabel){return 'INCONSISTENT_LIKE_STATE: '+label;}return 'UNKNOWN_LIKE_STATE: aria-pressed='+pressed+' | '+label;} return A();\"}]",
+                    "comment": "check current TikTok like"
+                  },
+                  {
+                    "$type": "GPMAutomateEditor.Models.IfBlockNode, GPMAutomateEditor.Models",
+                    "condition": "$tiktokLikeStatusBefore = \"READY_TO_LIKE\"",
+                    "nodes": [
+                      {
+                        "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                        "type": 50,
+                        "element_xpath": null,
+                        "output_variable_name": null,
+                        "delay": "300,700",
+                        "continue_on_error": false,
+                        "id": "9ba0fdb1-bf04-45a1-9f1f-ddc6dfc82d34",
+                        "display_text": null,
+                        "raw_input": "[{\"Key\":\"MOVE_TYPE\",\"Value\":\"MOVE_XPATH\"},{\"Key\":\"XPATH\",\"Value\":\"//*[@data-gpm-tiktok-like-ref='1']\"},{\"Key\":\"POS\",\"Value\":\"\"}]",
+                        "comment": "move to current TikTok like"
+                      },
+                      {
+                        "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                        "type": 48,
+                        "element_xpath": "//*[@data-gpm-tiktok-like-ref='1']",
+                        "output_variable_name": null,
+                        "delay": "800,1200",
+                        "continue_on_error": false,
+                        "id": "3c6570f5-8db4-4a14-844c-2fa646b5e322",
+                        "display_text": null,
+                        "raw_input": "[{\"Key\":\"CLICK_TYPE\",\"Value\":\"CLICK_XPATH\"},{\"Key\":\"XPATH\",\"Value\":\"//*[@data-gpm-tiktok-like-ref='1']\"},{\"Key\":\"POS\",\"Value\":\"\"}]",
+                        "comment": "click current TikTok like"
+                      }
+                    ],
+                    "expanded": true,
+                    "continue_on_error": false,
+                    "id": "139724ba-4b91-4720-b7df-ba8fe853ea99",
+                    "display_text": "If",
+                    "raw_input": "[{\"Key\":\"CONDITION\",\"Value\":\"$tiktokLikeStatusBefore = \\\"READY_TO_LIKE\\\"\"}]",
+                    "comment": "click only if ready"
+                  },
+                  {
+                    "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                    "type": 7,
+                    "element_xpath": null,
+                    "output_variable_name": null,
+                    "delay": "400,700",
+                    "continue_on_error": false,
+                    "id": "d11b162d-3f5d-438e-8df0-573f94b80f10",
+                    "display_text": null,
+                    "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"800\"},{\"Key\":\"MAX\",\"Value\":\"1200\"}]",
+                    "comment": "wait like..."
+                  },
+                  {
+                    "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                    "type": 68,
+                    "element_xpath": null,
+                    "output_variable_name": "tiktokLikeStatus",
+                    "delay": "250,850",
+                    "continue_on_error": false,
+                    "id": "a711f015-2097-46fe-8e80-5cdfb8242722",
+                    "display_text": null,
+                    "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"function A(){var before='$tiktokLikeStatusBefore';var n=document.querySelector('[data-gpm-tiktok-like-ref=\\\"1\\\"]');if(!n){return 'LIKE_BUTTON_NOT_FOUND';}if(before!=='READY_TO_LIKE'){return before;}var label=(n.getAttribute('aria-label')||'').replace(/\\\\s+/g,' ').trim();var pressed=(n.getAttribute('aria-pressed')||'').toLowerCase();return pressed==='true'?'LIKE_SUCCESS':'LIKE_CLICKED_BUT_UNCONFIRMED: aria-pressed='+pressed+' | '+label;} return A();\"}]",
+                    "comment": "verify TikTok like status"
+                  }
+                ],
+                "expanded": true,
+                "continue_on_error": false,
+                "id": "eaa499c8-2cd7-4b68-b5af-f487eac3b8a7",
+                "display_text": "Normal block",
+                "raw_input": null,
+                "comment": "like current TikTok video"
+              }
+            ],
+            "expanded": true,
+            "continue_on_error": false,
+            "id": "e36bc4ce-6217-43a9-8e65-3447c066e32a",
+            "display_text": "If",
+            "raw_input": "[{\"Key\":\"CONDITION\",\"Value\":\"$tiktokLikeRandom = 1\"}]",
+            "comment": "like when random is 1 or 9\r\n$tiktokLikeRandom = 1 || $tiktokLikeRandom = 9"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ElseBlockNode, GPMAutomateEditor.Models",
+            "nodes": [
+              {
+                "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                "type": 1,
+                "element_xpath": null,
+                "output_variable_name": "tiktokLikeStatus",
+                "delay": "560,1600",
+                "continue_on_error": false,
+                "id": "1b6e1afc-6876-4890-b411-b1c99cae2174",
+                "display_text": null,
+                "raw_input": "[{\"Key\":\"VALUE\",\"Value\":\"RANDOM_NO_LIKE\"},{\"Key\":\"ALLOW_USER_INPUT\",\"Value\":\"False\"},{\"Key\":\"USER_INPUT_TYPE\",\"Value\":\"Text\"},{\"Key\":\"COMBOBOX_DATA\",\"Value\":\"\"},{\"Key\":\"INPUT_REQUIRED\",\"Value\":\"False\"}]",
+                "comment": "random no like"
+              }
+            ],
+            "expanded": true,
+            "continue_on_error": false,
+            "id": "3a7047e5-c9ac-4134-930e-4832edcbe13d",
+            "display_text": "Else",
+            "raw_input": null,
+            "comment": "random no like"
+          }
+        ],
+        "expanded": true,
+        "continue_on_error": false,
+        "id": "44d7bedc-9808-43b4-9f48-dd1612a6badc",
+        "display_text": "Normal block",
+        "raw_input": null,
+        "comment": "random TikTok like decision"
+      },
+      {
+        "$type": "GPMAutomateEditor.Models.IfBlockNode, GPMAutomateEditor.Models",
+        "condition": "$tiktokLikeStatus = \"LIKE_SUCCESS\"",
+        "nodes": [
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 7,
+            "element_xpath": null,
+            "output_variable_name": null,
+            "delay": "300,700",
+            "continue_on_error": false,
+            "id": "5839d487-e20c-4a17-b5bc-647142f6c7ad",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"5000\"},{\"Key\":\"MAX\",\"Value\":\"10000\"}]",
+            "comment": "wait Like persistence..."
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 68,
+            "element_xpath": null,
+            "output_variable_name": "tiktokLikePersistenceStatus",
+            "delay": "250,850",
+            "continue_on_error": false,
+            "id": "4c34b8fd-aa3e-47b2-8c30-cbcb243452dd",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"function A(){var n=document.querySelector('[data-gpm-tiktok-like-ref=\\\"1\\\"]');if(!n){return 'LIKE_BUTTON_NOT_FOUND_AFTER_WAIT';}var label=(n.getAttribute('aria-label')||'').replace(/\\\\s+/g,' ').trim();var pressed=(n.getAttribute('aria-pressed')||'').toLowerCase();return pressed==='true'?'LIKE_PERSISTED':'LIKE_REVERTED: aria-pressed='+pressed+' | '+label;} return A();\"}]",
+            "comment": "verify Like persistence"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.IfBlockNode, GPMAutomateEditor.Models",
+            "condition": "$tiktokLikePersistenceStatus != \"LIKE_PERSISTED\"",
+            "nodes": [
+              {
+                "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                "type": 1,
+                "element_xpath": null,
+                "output_variable_name": "flowRunStatus",
+                "delay": "0,0",
+                "continue_on_error": false,
+                "id": "994d5639-b3eb-4fd7-88cc-330d1d41b170",
+                "display_text": "Set variable",
+                "raw_input": "[{\"Key\":\"VALUE\",\"Value\":\"ERROR:FLOW_1_LIKE_NOT_PERSISTED\"},{\"Key\":\"ALLOW_USER_INPUT\",\"Value\":\"False\"},{\"Key\":\"USER_INPUT_TYPE\",\"Value\":\"Text\"},{\"Key\":\"COMBOBOX_DATA\",\"Value\":\"\"},{\"Key\":\"INPUT_REQUIRED\",\"Value\":\"False\"}]",
+                "comment": "mark Like persistence error"
+              },
+              {
+                "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                "type": 68,
+                "element_xpath": null,
+                "output_variable_name": null,
+                "delay": "0,0",
+                "continue_on_error": false,
+                "id": "fdd6ba2e-a7a2-4935-ab0f-aa571e891f09",
+                "display_text": null,
+                "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"window.__gpmFlowRunStatus='ERROR:FLOW_1_LIKE_NOT_PERSISTED';\"}]",
+                "comment": "publish Like persistence error"
+              },
+              {
+                "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                "type": 117,
+                "element_xpath": null,
+                "output_variable_name": null,
+                "delay": "0,0",
+                "continue_on_error": false,
+                "id": "e706420b-1350-455b-9a73-d056c415b5b5",
+                "display_text": null,
+                "raw_input": "[{\"Key\":\"MESSAGE\",\"Value\":\"FLOW_1_LIKE_NOT_PERSISTED | profile=$profileId | status=$tiktokLikePersistenceStatus\"}]",
+                "comment": "throw Like persistence error"
+              }
+            ],
+            "expanded": true,
+            "continue_on_error": false,
+            "id": "4c855407-ca0f-4f17-9d2d-48f90df968fb",
+            "display_text": "If",
+            "raw_input": "[{\"Key\":\"CONDITION\",\"Value\":\"$tiktokLikePersistenceStatus != \\\"LIKE_PERSISTED\\\"\"}]",
+            "comment": "fail when Like did not persist"
+          }
+        ],
+        "expanded": true,
+        "continue_on_error": false,
+        "id": "aaa58343-e011-442b-85df-5e5d55577070",
+        "display_text": "If",
+        "raw_input": "[{\"Key\":\"CONDITION\",\"Value\":\"$tiktokLikeStatus = \\\"LIKE_SUCCESS\\\"\"}]",
+        "comment": "keep Like state before success"
+      },
+      {
+        "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+        "type": 1,
+        "element_xpath": null,
+        "output_variable_name": "flowRunStatus",
+        "delay": "480,840",
+        "continue_on_error": false,
+        "id": "1f95ce2c-9a50-46fb-b4e1-385958c4dd04",
+        "display_text": "Set variable",
+        "raw_input": "[{\"Key\":\"VALUE\",\"Value\":\"OK\"},{\"Key\":\"ALLOW_USER_INPUT\",\"Value\":\"False\"},{\"Key\":\"USER_INPUT_TYPE\",\"Value\":\"Text\"},{\"Key\":\"COMBOBOX_DATA\",\"Value\":\"\"},{\"Key\":\"INPUT_REQUIRED\",\"Value\":\"False\"}]",
+        "comment": "mark flow_1 success"
+      },
+      {
+        "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+        "type": 68,
+        "element_xpath": null,
+        "output_variable_name": null,
+        "delay": "660,990",
+        "continue_on_error": false,
+        "id": "10a91c3f-ff61-4c3c-a4ce-b9f0732258ca",
+        "display_text": null,
+        "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"window.__gpmFlowRunStatus='OK';\"}]",
+        "comment": "publish flow_1 success"
       }
     ],
     "expanded": true,

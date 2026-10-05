@@ -1,0 +1,312 @@
+{
+  "$type": "GPMAutomateEditor.Models.SubEditor, GPMAutomateEditor.Models",
+  "body": {
+    "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+    "nodes": [
+      {
+        "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+        "nodes": [],
+        "expanded": true,
+        "continue_on_error": false,
+        "id": "de7b590d-ebb6-417a-8ab6-f8581fd1f8ba",
+        "display_text": "Normal block",
+        "raw_input": null,
+        "comment": "GHI CHÚ FLOW 3\n- Thao tác chính: chuyển mượt đến video TikTok kế tiếp, mở phần Bình luận, chờ 5 giây, cuộn xuống/cuộn lên ngẫu nhiên trong phần bình luận 10 giây, rồi đóng phần bình luận.\n- Flow dùng article kế tiếp thay BrowserMouseScroll để không bị giật từng nấc nhỏ.\n- Sửa thời gian xem bình luận: Block #2 `TikTok: xem bình luận video kế tiếp` → node #7 `wait comments...` (5000ms).\n- Sửa thời gian cuộn comment: Block #2 → node #10 `scroll comments for 10s` (10000ms); nhịp và quãng cuộn ngẫu nhiên nằm trong node #8 `start random comment scrolling`.\n- Cách đếm: dùng số thứ tự block/node hiển thị trong GPM Automate, tính cả block ghi chú này."
+      },
+      {
+        "$type": "GPMAutomateEditor.Models.NormalBlockNode, GPMAutomateEditor.Models",
+        "nodes": [
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 68,
+            "element_xpath": null,
+            "output_variable_name": "tiktokScrollStatus",
+            "delay": "550,980",
+            "continue_on_error": false,
+            "id": "87f5a2f6-3429-425e-9629-fb901071cfe6",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"function A(){var xs=Array.prototype.slice.call(document.querySelectorAll('article')).filter(function(a){var r=a.getBoundingClientRect();return a.isConnected&&r.width>100&&r.height>100;});if(!xs.length){return 'ARTICLE_NOT_FOUND';}var current=0,best=Infinity;for(var i=0;i<xs.length;i++){var r=xs[i].getBoundingClientRect(),d=Math.abs(r.top);if(d<best){best=d;current=i;}}var next=xs[current+1];if(!next){return 'NEXT_ARTICLE_NOT_FOUND';}next.scrollIntoView({block:'start',behavior:'smooth'});return 'SCROLLED_TO_NEXT_ARTICLE';} return A();\"}]",
+            "comment": "scroll next TikTok article"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.IfBlockNode, GPMAutomateEditor.Models",
+            "condition": "$tiktokScrollStatus != \"SCROLLED_TO_NEXT_ARTICLE\"",
+            "nodes": [
+              {
+                "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                "type": 68,
+                "element_xpath": null,
+                "output_variable_name": null,
+                "delay": "630,930",
+                "continue_on_error": false,
+                "id": "83947129-aa77-4b3a-aedb-a6cabb818762",
+                "display_text": null,
+                "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"window.__gpmFlowRunStatus = 'ERROR:FLOW_3_NEXT_VIDEO_NOT_FOUND';\"}]",
+                "comment": "publish next-video error"
+              },
+              {
+                "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                "type": 117,
+                "element_xpath": null,
+                "output_variable_name": null,
+                "delay": "580,880",
+                "continue_on_error": false,
+                "id": "e0ce2ad6-bc91-4215-b42e-e05b526d9bd6",
+                "display_text": null,
+                "raw_input": "[{\"Key\":\"MESSAGE\",\"Value\":\"FLOW_3_NEXT_VIDEO_NOT_FOUND | profile=$profileId | status=$tiktokScrollStatus\"}]",
+                "comment": "throw next-video error"
+              }
+            ],
+            "expanded": true,
+            "continue_on_error": false,
+            "id": "fb64d9ab-4e24-4a13-9237-b73f749f3de0",
+            "display_text": "If",
+            "raw_input": "[{\"Key\":\"CONDITION\",\"Value\":\"$tiktokScrollStatus != \\\"SCROLLED_TO_NEXT_ARTICLE\\\"\"}]",
+            "comment": "throw if next video missing"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 7,
+            "element_xpath": null,
+            "output_variable_name": null,
+            "delay": "660,880",
+            "continue_on_error": false,
+            "id": "950fe54b-763a-4ae1-b429-adc0d566ce63",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"800\"},{\"Key\":\"MAX\",\"Value\":\"1500\"}]",
+            "comment": "wait video snap..."
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 68,
+            "element_xpath": null,
+            "output_variable_name": "tiktokCommentTargetStatus",
+            "delay": "750,1200",
+            "continue_on_error": false,
+            "id": "97ea7c96-c25b-4ed1-86b4-101bc0814b3a",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"function A(){document.querySelectorAll('[data-gpm-tiktok-comment-ref]').forEach(function(x){x.removeAttribute('data-gpm-tiktok-comment-ref');});var xs=Array.prototype.slice.call(document.querySelectorAll('article')).filter(function(a){var r=a.getBoundingClientRect();return a.isConnected&&r.width>100&&r.height>100;});if(!xs.length){return 'ARTICLE_NOT_FOUND';}var current=0,best=Infinity;for(var i=0;i<xs.length;i++){var d=Math.abs(xs[i].getBoundingClientRect().top);if(d<best){best=d;current=i;}}var b=xs[current].querySelector('[data-e2e=\\\"comment-icon\\\"][role=\\\"button\\\"]');if(!b){return 'COMMENT_BUTTON_NOT_FOUND';}b.setAttribute('data-gpm-tiktok-comment-ref','1');return 'COMMENT_READY';} return A();\"}]",
+            "comment": "mark current TikTok comment"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.IfBlockNode, GPMAutomateEditor.Models",
+            "condition": "$tiktokCommentTargetStatus != \"COMMENT_READY\"",
+            "nodes": [
+              {
+                "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                "type": 68,
+                "element_xpath": null,
+                "output_variable_name": null,
+                "delay": "690,960",
+                "continue_on_error": false,
+                "id": "321a0b8a-afca-4d79-a271-81d3ce07ebc8",
+                "display_text": null,
+                "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"window.__gpmFlowRunStatus = 'ERROR:FLOW_3_COMMENT_BUTTON_NOT_FOUND';\"}]",
+                "comment": "publish comment-button error"
+              },
+              {
+                "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                "type": 117,
+                "element_xpath": null,
+                "output_variable_name": null,
+                "delay": "0,0",
+                "continue_on_error": false,
+                "id": "5b520a03-4372-439a-b9d8-82a00bd4d01e",
+                "display_text": null,
+                "raw_input": "[{\"Key\":\"MESSAGE\",\"Value\":\"FLOW_3_COMMENT_BUTTON_NOT_FOUND | profile=$profileId | status=$tiktokCommentTargetStatus\"}]",
+                "comment": "throw comment-button error"
+              }
+            ],
+            "expanded": true,
+            "continue_on_error": false,
+            "id": "fc09ea66-c17f-4c4d-a51c-1d69e53f37e4",
+            "display_text": "If",
+            "raw_input": "[{\"Key\":\"CONDITION\",\"Value\":\"$tiktokCommentTargetStatus != \\\"COMMENT_READY\\\"\"}]",
+            "comment": "throw if comment target missing"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 48,
+            "element_xpath": "//*[@data-gpm-tiktok-comment-ref='1']",
+            "output_variable_name": null,
+            "delay": "0,0",
+            "continue_on_error": false,
+            "id": "7c13fc71-3a80-4066-afeb-fc7191ef748e",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"CLICK_TYPE\",\"Value\":\"CLICK_XPATH\"},{\"Key\":\"XPATH\",\"Value\":\"//*[@data-gpm-tiktok-comment-ref='1']\"},{\"Key\":\"POS\",\"Value\":\"\"}]",
+            "comment": "click current TikTok comment"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 7,
+            "element_xpath": null,
+            "output_variable_name": null,
+            "delay": "0,0",
+            "continue_on_error": false,
+            "id": "bc1c3c5a-16b4-4b82-9d5f-8ce5a9e15a73",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"5000\"},{\"Key\":\"MAX\",\"Value\":\"5000\"}]",
+            "comment": "wait comments..."
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 68,
+            "element_xpath": null,
+            "output_variable_name": "tiktokCommentScrollStatus",
+            "delay": "0,0",
+            "continue_on_error": false,
+            "id": "ea45b25a-1b57-4d20-b46a-69e252739ac6",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"function A(){var post=document.querySelector('[data-e2e=\\\"comment-post\\\"]');if(!post){return 'COMMENT_PANEL_NOT_FOUND';}var root=post.closest('section');if(!root){return 'COMMENT_PANEL_NOT_FOUND';}var all=Array.prototype.slice.call(root.querySelectorAll('*')),sc=null,best=0;for(var i=0;i<all.length;i++){var e=all[i];if(e.scrollHeight>e.clientHeight+30&&e.clientHeight>best){sc=e;best=e.clientHeight;}}if(!sc){return 'COMMENT_SCROLL_NOT_FOUND';}var old=window.__gpmTikTokCommentScroll;if(old&&old.timer){clearInterval(old.timer);}var until=Date.now()+10000;function tick(){if(Date.now()>=until){clearInterval(window.__gpmTikTokCommentScroll.timer);return;}var max=Math.max(0,sc.scrollHeight-sc.clientHeight),step=160+Math.floor(Math.random()*361),dir=Math.random()<0.5?1:-1,next=Math.max(0,Math.min(max,sc.scrollTop+dir*step));if(Math.abs(next-sc.scrollTop)<10){next=Math.max(0,Math.min(max,sc.scrollTop-dir*step));}sc.scrollTo({top:next,behavior:'smooth'});}tick();var timer=setInterval(tick,800);window.__gpmTikTokCommentScroll={timer:timer,scroll:sc};return 'COMMENT_SCROLL_STARTED';} return A();\"}]",
+            "comment": "start random comment scrolling"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.IfBlockNode, GPMAutomateEditor.Models",
+            "condition": "$tiktokCommentScrollStatus != \"COMMENT_SCROLL_STARTED\"",
+            "nodes": [
+              {
+                "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                "type": 117,
+                "element_xpath": null,
+                "output_variable_name": null,
+                "delay": "770,990",
+                "continue_on_error": false,
+                "id": "36ea63ca-0b13-4443-9b74-f8b78888833f",
+                "display_text": null,
+                "raw_input": "[{\"Key\":\"MESSAGE\",\"Value\":\"FLOW_3_COMMENT_SCROLL_NOT_STARTED | profile=$profileId | status=$tiktokCommentScrollStatus\"}]",
+                "comment": "throw comment-scroll error"
+              }
+            ],
+            "expanded": true,
+            "continue_on_error": false,
+            "id": "396f010f-9ec6-43db-bee9-3bbedf68a979",
+            "display_text": "If",
+            "raw_input": "[{\"Key\":\"CONDITION\",\"Value\":\"$tiktokCommentScrollStatus != \\\"COMMENT_SCROLL_STARTED\\\"\"}]",
+            "comment": "throw if comment scroll missing"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 7,
+            "element_xpath": null,
+            "output_variable_name": null,
+            "delay": "450,850",
+            "continue_on_error": false,
+            "id": "08ac5fba-d1df-49ed-83b4-ad541078b91b",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"10000\"},{\"Key\":\"MAX\",\"Value\":\"10000\"}]",
+            "comment": "scroll comments for 10s"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 68,
+            "element_xpath": null,
+            "output_variable_name": "tiktokCommentScrollStopStatus",
+            "delay": "550,950",
+            "continue_on_error": false,
+            "id": "d7ad5d57-9a62-43cd-a089-215f961d56cc",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"function A(){var s=window.__gpmTikTokCommentScroll;if(!s||!s.timer){return 'COMMENT_SCROLL_NOT_STARTED';}clearInterval(s.timer);delete window.__gpmTikTokCommentScroll;return 'COMMENT_SCROLL_STOPPED';} return A();\"}]",
+            "comment": "stop random comment scrolling"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 68,
+            "element_xpath": null,
+            "output_variable_name": "tiktokCommentCloseStatus",
+            "delay": "680,860",
+            "continue_on_error": false,
+            "id": "38574600-c0f1-41f0-9f84-0e5a77cf3753",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"function A(){var b=document.querySelector('[data-key-interaction=\\\"comment_close\\\"] button[aria-label=\\\"exit\\\"]');if(!b){return 'COMMENT_CLOSE_NOT_FOUND';}b.click();return 'COMMENT_CLOSE_CLICKED';} return A();\"}]",
+            "comment": "close TikTok comments"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 7,
+            "element_xpath": null,
+            "output_variable_name": null,
+            "delay": "460,770",
+            "continue_on_error": false,
+            "id": "6a036c8b-5116-4d37-99cf-7b3ceaf6dee6",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"MIN\",\"Value\":\"800\"},{\"Key\":\"MAX\",\"Value\":\"1500\"}]",
+            "comment": "wait comments close..."
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+            "type": 68,
+            "element_xpath": null,
+            "output_variable_name": "tiktokCommentCloseVerify",
+            "delay": "610,890",
+            "continue_on_error": false,
+            "id": "75475047-6381-40b5-8b6b-35d3ce9f5aad",
+            "display_text": null,
+            "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"return document.querySelector('[data-e2e=\\\"comment-post\\\"]')?'COMMENT_STILL_OPEN':'COMMENT_CLOSED';\"}]",
+            "comment": "verify TikTok comments closed"
+          },
+          {
+            "$type": "GPMAutomateEditor.Models.IfBlockNode, GPMAutomateEditor.Models",
+            "condition": "$tiktokCommentCloseVerify != \"COMMENT_CLOSED\"",
+            "nodes": [
+              {
+                "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+                "type": 117,
+                "element_xpath": null,
+                "output_variable_name": null,
+                "delay": "490,790",
+                "continue_on_error": false,
+                "id": "2ced2ec0-46f0-4d32-b127-901e94dab966",
+                "display_text": null,
+                "raw_input": "[{\"Key\":\"MESSAGE\",\"Value\":\"FLOW_3_COMMENT_NOT_CLOSED | profile=$profileId | status=$tiktokCommentCloseVerify\"}]",
+                "comment": "throw comment-close error"
+              }
+            ],
+            "expanded": true,
+            "continue_on_error": false,
+            "id": "8ab701cb-068b-45b0-a54c-dca264e5c1da",
+            "display_text": "If",
+            "raw_input": "[{\"Key\":\"CONDITION\",\"Value\":\"$tiktokCommentCloseVerify != \\\"COMMENT_CLOSED\\\"\"}]",
+            "comment": "throw if comments remain open"
+          }
+        ],
+        "expanded": true,
+        "continue_on_error": false,
+        "id": "f837d143-6fda-4fa4-a48f-a590863cd35b",
+        "display_text": "Normal block",
+        "raw_input": null,
+        "comment": "TikTok: xem bình luận video kế tiếp"
+      },
+      {
+        "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+        "type": 1,
+        "element_xpath": null,
+        "output_variable_name": "flowRunStatus",
+        "delay": "460,790",
+        "continue_on_error": false,
+        "id": "086662ab-7d31-4d97-a15f-a259ebaf5206",
+        "display_text": null,
+        "raw_input": "[{\"Key\":\"VALUE\",\"Value\":\"OK\"},{\"Key\":\"ALLOW_USER_INPUT\",\"Value\":\"False\"},{\"Key\":\"USER_INPUT_TYPE\",\"Value\":\"Text\"},{\"Key\":\"COMBOBOX_DATA\",\"Value\":\"\"},{\"Key\":\"INPUT_REQUIRED\",\"Value\":\"False\"}]",
+        "comment": "mark flow_3 success"
+      },
+      {
+        "$type": "GPMAutomateEditor.Models.ActionNode, GPMAutomateEditor.Models",
+        "type": 68,
+        "element_xpath": null,
+        "output_variable_name": null,
+        "delay": "660,880",
+        "continue_on_error": false,
+        "id": "663ea731-5003-46ab-87a8-35217571c323",
+        "display_text": null,
+        "raw_input": "[{\"Key\":\"FILE_OR_CODE\",\"Value\":\"window.__gpmFlowRunStatus = 'OK';\"}]",
+        "comment": "publish flow_3 success"
+      }
+    ],
+    "expanded": true,
+    "continue_on_error": false,
+    "id": "2902e6c0-b645-41d2-8e0e-d0d746cd868a",
+    "display_text": null,
+    "raw_input": null,
+    "comment": null
+  },
+  "name": "Main"
+}
